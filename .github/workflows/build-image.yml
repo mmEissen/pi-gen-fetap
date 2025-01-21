@@ -10,4 +10,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Image
         run: |
-          ./build.sh
+          sudo ./build.sh
