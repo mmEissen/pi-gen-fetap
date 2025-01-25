@@ -1,13 +1,12 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Build RPi Image
 
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  build:
     runs-on: [self-hosted, arm64]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Build Image
         run: |
-          sudo ./build.sh
+          sudo python build_ci.py
