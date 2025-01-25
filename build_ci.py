@@ -18,15 +18,18 @@ def main():
 def build_image() -> None:
     for stage in range(STAGE_COUNT):
         if code_version(stage) == cached_version(stage):
+            print(f"Skipping stage{stage}")
             run(["touch", path.join(_WORKING_DIR, f"stage{stage}", "SKIP")])
         else:
             first_stage_to_build = stage
+            print(f"Loading stage{stage - 1} as starting point for stage{stage}")
             copy_cache(first_stage_to_build)
             break
     else:
         first_stage_to_build = STAGE_COUNT
     execute(["./build.sh"], env={"CLEAN": "1"})
     for stage in range(first_stage_to_build, STAGE_COUNT):
+        print(f"Storing rootfs of stage{stage}")
         store_cache(stage)
 
 
@@ -36,7 +39,7 @@ def copy_cache(target_stage: int) -> None:
     stage_dir = path.join(_PI_WORK_DIR, f"stage{target_stage}")
     run(["mkdir", "-p", stage_dir])
     cache_dir = path.join(CACHE_DIR, f"stage{target_stage - 1}", cached_version(target_stage - 1))
-    run(["cp", "-r", path.join(cache_dir, "*"), stage_dir])
+    run(["cp", "-r", path.join(cache_dir, "rootfs"), stage_dir])
 
 
 def store_cache(stage: int) -> None:
@@ -52,7 +55,7 @@ def store_cache(stage: int) -> None:
 
     # Actually copy the files from the last build to the cache dir
     build_stage_dir = path.join(_PI_WORK_DIR, f"stage{stage}")
-    run(["cp", "-r", path.join(build_stage_dir, "*"), cache_dir])
+    run(["cp", "-r", path.join(build_stage_dir, "rootfs"), cache_dir])
 
 
 def code_version(stage: int) -> str:
