@@ -10,3 +10,8 @@ jobs:
       - name: Build Image
         run: |
           sudo python build_ci.py
+      - name: Clean build dir
+        if: always()
+        run: |
+          sudo rm -rf work
+          sudo rm -rf deploy
