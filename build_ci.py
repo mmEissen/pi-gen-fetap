@@ -17,6 +17,8 @@ def main():
 
 def build_image() -> None:
     for stage in range(STAGE_COUNT):
+        print(f"Checking stage{stage}")
+        print(f"Code is at version {code_version(stage)}, cache is at version {cached_version(stage)}")
         if code_version(stage) == cached_version(stage):
             print(f"Skipping stage{stage}")
             run(["touch", path.join(_WORKING_DIR, f"stage{stage}", "SKIP")])
