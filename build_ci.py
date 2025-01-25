@@ -2,6 +2,7 @@ from os import path
 import subprocess
 import os
 from typing import Optional
+import sys
 
 CACHE_DIR = "/home/momo/usb1/build_cache"
 STAGE_COUNT = 4
@@ -31,7 +32,7 @@ def build_image() -> None:
         copy_cache(STAGE_COUNT - 1, STAGE_COUNT - 1)
         first_stage_to_build = STAGE_COUNT
 
-    print("Starting build!", flush=True)
+    print("Starting build!")
     execute(["./build.sh"], env={"CLEAN": "1"})
 
     for stage in range(first_stage_to_build, STAGE_COUNT):
@@ -89,6 +90,7 @@ def cached_version(stage: int) -> str:
 
 
 def run(command: list[str], env: Optional[dict[str, str]] = None) -> str:
+    sys.stdout.flush()
     result = subprocess.run(
         command,
         stdout=subprocess.PIPE,
@@ -101,6 +103,7 @@ def run(command: list[str], env: Optional[dict[str, str]] = None) -> str:
 
 
 def execute(command: list[str], env: Optional[dict[str, str]] = None) -> str:
+    sys.stdout.flush()
     subprocess.run(
         command,
         check=True,
