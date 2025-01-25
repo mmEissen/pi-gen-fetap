@@ -28,19 +28,25 @@ def build_image() -> None:
             copy_cache(first_stage_to_build)
             break
     else:
+        copy_cache(STAGE_COUNT - 1, STAGE_COUNT - 1)
         first_stage_to_build = STAGE_COUNT
+
+    print("Starting build!", flush=True)
     execute(["./build.sh"], env={"CLEAN": "1"})
+
     for stage in range(first_stage_to_build, STAGE_COUNT):
         print(f"Storing rootfs of stage{stage}")
         store_cache(stage)
 
 
-def copy_cache(target_stage: int) -> None:
-    if target_stage == 0:
+def copy_cache(target_stage: int, cache_stage: int = -1) -> None:
+    if cache_stage < 0:
+        cache_stage = target_stage - 1
+    if cache_stage < 0:
         return
     stage_dir = path.join(_PI_WORK_DIR, f"stage{target_stage}")
     run(["mkdir", "-p", stage_dir])
-    cache_dir = path.join(CACHE_DIR, f"stage{target_stage - 1}", cached_version(target_stage - 1))
+    cache_dir = path.join(CACHE_DIR, f"stage{cache_stage}", cached_version(cache_stage))
     run(["cp", "-r", path.join(cache_dir, "rootfs"), stage_dir])
 
 
