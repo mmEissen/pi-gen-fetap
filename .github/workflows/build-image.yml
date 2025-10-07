@@ -12,7 +12,7 @@ jobs:
 
       - name: Build Image
         run: |
-          ./build.sh
+          sudo ./build.sh
       
       - uses: actions/upload-artifact@v4
         with:
