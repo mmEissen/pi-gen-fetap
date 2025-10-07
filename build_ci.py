@@ -26,10 +26,10 @@ def build_image() -> None:
         else:
             first_stage_to_build = stage
             print(f"Loading stage{stage - 1} as starting point for stage{stage}")
-            copy_cache(first_stage_to_build)
+            load_cache(first_stage_to_build)
             break
     else:
-        copy_cache(STAGE_COUNT - 1, STAGE_COUNT - 1)
+        load_cache(STAGE_COUNT - 1, STAGE_COUNT - 1)
         first_stage_to_build = STAGE_COUNT
 
     print("Starting build!")
@@ -40,7 +40,7 @@ def build_image() -> None:
         store_cache(stage)
 
 
-def copy_cache(target_stage: int, cache_stage: int = -1) -> None:
+def load_cache(target_stage: int, cache_stage: int = -1) -> None:
     if cache_stage < 0:
         cache_stage = target_stage - 1
     if cache_stage < 0:

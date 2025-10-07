@@ -3,7 +3,7 @@ name: Build RPi Image
 on: [push]
 jobs:
   build:
-    runs-on: [self-hosted, arm64]
+    runs-on: ubuntu-24.04-arm
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -12,10 +12,9 @@ jobs:
 
       - name: Build Image
         run: |
-          sudo python build_ci.py
-
-      - name: Clean build dir
-        if: always()
-        run: |
-          sudo rm -rf work
-          sudo rm -rf deploy
+          ./build.sh
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image
+          path: ./deploy/*
