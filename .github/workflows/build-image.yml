@@ -12,7 +12,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          xargs sudo apt-get -y install < depends
+          xargs sudo apt-get -y install \
+            quilt \
+            qemu-user-static \
+            debootstrap \
+            libarchive-tools \
+            arch-test
 
       - name: Build Image
         run: |
