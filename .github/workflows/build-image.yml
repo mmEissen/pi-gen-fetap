@@ -10,6 +10,10 @@ jobs:
         with:
             fetch-depth: 0
 
+      - name: Install dependencies
+        run: |
+          xargs sudo apt-get -y install < depends
+
       - name: Build Image
         run: |
           sudo ./build.sh
