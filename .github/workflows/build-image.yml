@@ -22,7 +22,13 @@ jobs:
       - name: Build Image
         run: |
           sudo ./build.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image
+          path: ./deploy/*
       
       - uses: ncipollo/release-action@v1
+        if: startsWith( github.ref, 'refs/tags' )
         with:
           artifacts: "./deploy/*"
